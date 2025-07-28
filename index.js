@@ -45,7 +45,7 @@ module.exports = async ({ req, res, log, error }) => {
     }
 
     docs.documents.forEach(doc => {
-        if (currentMinutes >= times[doc.selectedTime]) {
+        if (currentMinutes >= times[doc.selectedTime] && doc.status == 'pending') {
             let booking_id = doc.$id;
             let payload = {
                 "text": "*📅 Unassigned Bookings*",
@@ -115,7 +115,7 @@ module.exports = async ({ req, res, log, error }) => {
                 .catch(err => console.error("Error:", err));
 
         }
-        if (currentMinutes >= (times[doc.selectedTime] + 60)) {
+        if (currentMinutes >= (times[doc.selectedTime] + 60) && doc.status == 'pending') {
             let booking_id = doc.$id;
             databases.updateDocument(db, bookings_collection, booking_id, {
                 status: "overdue"
